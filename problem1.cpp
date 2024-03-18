@@ -32,6 +32,12 @@ public:
     }
 
     int getSize() {
+        Node *temp= head;
+        int size = 0 ;
+        while(temp){
+        temp = temp->next
+            size++;
+        }
         return size;
     }
 
