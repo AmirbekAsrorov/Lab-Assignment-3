@@ -38,7 +38,7 @@ int main() {
 
     int minDistance = findMinimumDistance(arr, x, y);
 
-    cout << "Minimum distance between " << x << " and " << y << ": " << minDistance << endl;
+    cout <</* "Minimum distance between " << x << " and " << y << ": " <<*/ minDistance << endl;
 
     return 0;
 }
