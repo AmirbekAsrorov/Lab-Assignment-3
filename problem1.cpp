@@ -90,7 +90,7 @@ int main() {
         list.insert(num);
     }
 
-    cout << "Maximum number: " << list.getMaximum() <<' '<< "First element: " << list.getFirst() << ' ' << "Size of the list: " << list.getSize() << ' ' << "Minimum number: " << list.getMinimum() << endl;
+    cout << list.getMaximum() <<' '<< list.getFirst() << ' ' << list.getSize() << ' ' << list.getMinimum() << endl;
 
     return 0;
 }
