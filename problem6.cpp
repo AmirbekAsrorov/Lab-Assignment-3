@@ -1,20 +1,105 @@
-#include<iostream>
+#include <iostream>
+#include <queue>
+#include <cmath>
 using namespace std;
 
-int minimumDistance(int arr[], int n, int x, int y) {
-    int minDist = INT_MAX;
-    int prevIndex = -1;
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
 
-    for (int i = 0; i < n; i++) {
-        if (arr[i] == x || arr[i] == y) {
-            if (prevIndex != -1 && arr[i] != arr[prevIndex]) {
-                minDist = min(minDist, i - prevIndex);
-            }
-            prevIndex = i;
+    Node(int value) {
+        data = value;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+
+Node* insertNode(Node* root, int value) {
+    if (root == nullptr) {
+        return new Node(value);
+    }
+
+    queue<Node*> q;
+    q.push(root);
+
+    while (!q.empty()) {
+        Node* current = q.front();
+        q.pop();
+
+        if (current->left != nullptr) {
+            q.push(current->left);
+        } else {
+            current->left = new Node(value);
+            return root;
+        }
+
+        if (current->right != nullptr) {
+            q.push(current->right);
+        } else {
+            current->right = new Node(value);
+            return root;
         }
     }
 
-    return minDist;
+    return root;
+}
+
+int findLevel(Node* root, int value, int level) {
+    if (root == nullptr) {
+        return -1;
+    }
+
+    if (root->data == value) {
+        return level;
+    }
+
+    int leftLevel = findLevel(root->left, value, level + 1);
+    if (leftLevel != -1) {
+        return leftLevel;
+    }
+
+    return findLevel(root->right, value, level + 1);
+}
+
+int findDistance(Node* root, int x, int y) {
+    if (root == nullptr) {
+        return 0;
+    }
+
+    Node* commonAncestor = nullptr;
+    queue<Node*> q;
+    q.push(root);
+
+    while (!q.empty()) {
+        Node* current = q.front();
+        q.pop();
+
+        if ((current->data == x || current->data == y) && commonAncestor == nullptr) {
+            commonAncestor = current;
+        }
+
+        if (current->left != nullptr) {
+            q.push(current->left);
+        }
+
+        if (current->right != nullptr) {
+            q.push(current->right);
+        }
+
+        if (commonAncestor != nullptr) {
+            if (current->data == x || current->data == y) {
+                return abs(findLevel(root, x, 0) - findLevel(root, y, 0));
+            } else if (findLevel(current, x, 0) != -1 || findLevel(current, y, 0) != -1) {
+                int distanceX = findLevel(current, x, 0);
+                int distanceY = findLevel(current, y, 0);
+                return distanceX + distanceY;
+            }
+        }
+    }
+
+    return 0;
 }
 
 int main() {
@@ -22,28 +107,23 @@ int main() {
     cout << "Enter the number of elements: ";
     cin >> n;
 
-    int arr[n];
+    Node* root = nullptr;
+
     cout << "Enter " << n << " integer numbers: ";
     for (int i = 0; i < n; i++) {
-        cin >> arr[i];
+        int value;
+        cin >> value;
+        root = insertNode(root, value);
     }
 
     int x, y;
     cout << "Enter two numbers (x and y): ";
     cin >> x >> y;
 
-    int minDistance = minimumDistance(arr, n, x, y);
+    int distance = findDistance(root, x, y);
 
-    if (minDistance == INT_MAX) {
-        cout << "No occurrence of x or y in the array." << endl;
-    } else {
-        cout << "Minimum distance between " << x << " and " << y << " is: " << minDistance << endl;
-    }
+    cout << "Minimum distance between " << x << " and " << y << " is: " << distance << endl;
 
     return 0;
 }
-
-
-
-
 
