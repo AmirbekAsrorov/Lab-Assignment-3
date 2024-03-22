@@ -3,81 +3,82 @@
 
 using namespace std;
 
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int value) {
+        data = value;
+        next = nullptr;
+    }
+};
+
 class LinkedList {
 private:
-    struct Node {
-        int data;
-        Node* next;
-        Node(int val) : data(val), next(nullptr) {}
-    };
-
     Node* head;
-    int size;
 
 public:
-    LinkedList() : head(nullptr), size(0) {}
-
-    void insert(int val) {
-        Node* newNode = new Node(val);
-        if (head == nullptr) {
-            head = newNode;
-        } else {
-            Node* curr = head;
-            while (curr->next != nullptr) {
-                curr = curr->next;
-            }
-            curr->next = newNode;
-        }
-        size++;
+    LinkedList() {
+        head = nullptr;
     }
 
-    void insertAtPosition(int val, int position) {
-        if (position < 0 || position > size) {
-            cout << "Invalid position." << endl;
-            return;
-        }
-        Node* newNode = new Node(val);
-        if (position == 0) {
+    void insertAtPosition(int value, int position) {
+        Node* newNode = new Node(value);
+
+        if (position == 1) {
             newNode->next = head;
             head = newNode;
         } else {
-            Node* curr = head;
-            for (int i = 0; i < position - 1; i++) {
-                curr = curr->next;
+            Node* temp = head;
+            for (int i = 1; i < position - 1 && temp != nullptr; i++) {
+                temp = temp->next;
             }
-            newNode->next = curr->next;
-            curr->next = newNode;
+
+            if (temp != nullptr) {
+                newNode->next = temp->next;
+                temp->next = newNode;
+            } else {
+                cout << "Invalid position." << endl;
+                delete newNode;
+            }
         }
-        size++;
     }
 
-    int getSize() {
-        return size;
+    void displayList() {
+        Node* temp = head;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
     }
 };
 
 int main() {
     LinkedList list;
 
-    int n, num;
-    cout << "Enter the number of elements for the list: ";
+    int n;
+    cout << "Enter the number of elements: ";
     cin >> n;
 
     cout << "Enter " << n << " elements: ";
     for (int i = 0; i < n; i++) {
-        cin >> num;
-        list.insert(num);
+        int value;
+        cin >> value;
+        list.insertAtPosition(value, i + 1);
     }
 
-    int value, position;
-    cout << "Enter the value to insert: ";
-    cin >> value;
-    cout << "Enter the position to insert (0-indexed): ";
+    int newValue, position;
+    cout << "Enter the value of the new element: ";
+    cin >> newValue;
+    cout << "Enter the position to insert the new element: ";
     cin >> position;
-
-    list.insertAtPosition(value, position);
-
-    cout << "Size of the list: " << list.getSize() << endl;
+    list.insertAtPosition(newValue, position);
+    cout << "Updated list: ";
+    list.displayList();
 
     return 0;
 }
+
+
