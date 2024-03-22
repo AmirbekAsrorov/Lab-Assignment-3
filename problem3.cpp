@@ -1,4 +1,4 @@
-#include <iostream>
+#include<iostream>
 
 using namespace std;
 
@@ -22,24 +22,29 @@ public:
         head = nullptr;
     }
 
-    void insertAtPosition(int value, int position) {
-        Node* newNode = new Node(value);
+    void deleteAtPosition(int position) {
+        if (head == nullptr) {
+            cout << "List is empty. Cannot delete from an empty list." << endl;
+            return;
+        }
+
+        Node* temp = head;
 
         if (position == 1) {
-            newNode->next = head;
-            head = newNode;
+            head = head->next;
+            delete temp;
         } else {
-            Node* temp = head;
-            for (int i = 1; i < position - 1 && temp != nullptr; i++) {
+            Node* prev = nullptr;
+            for (int i = 1; i < position && temp != nullptr; i++) {
+                prev = temp;
                 temp = temp->next;
             }
 
             if (temp != nullptr) {
-                newNode->next = temp->next;
-                temp->next = newNode;
+                prev->next = temp->next;
+                delete temp;
             } else {
                 cout << "Invalid position." << endl;
-                delete newNode;
             }
         }
     }
@@ -51,6 +56,20 @@ public:
             temp = temp->next;
         }
         cout << endl;
+    }
+
+    void insertAtEnd(int value) {
+        Node* newNode = new Node(value);
+
+        if (head == nullptr) {
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
     }
 };
 
@@ -65,20 +84,16 @@ int main() {
     for (int i = 0; i < n; i++) {
         int value;
         cin >> value;
-        list.insertAtPosition(value, i + 1);
+        list.insertAtEnd(value);
     }
 
-    int newValue, position;
-    cout << "Enter the value of the new element: ";
-    cin >> newValue;
-    cout << "Enter the position to insert the new element: ";
+    int position;
+    cout << "Enter the position of the element to delete: ";
     cin >> position;
-    list.insertAtPosition(newValue, position);
+    list.deleteAtPosition(position);
 
     cout << "Updated list: ";
     list.displayList();
 
     return 0;
 }
-
-
