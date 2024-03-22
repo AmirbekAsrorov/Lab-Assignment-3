@@ -1,24 +1,20 @@
-#include <iostream>
-#include <vector>
-#include <climits>
-#include <cmath>
-
+#include<iostream>
 using namespace std;
 
-int findMinimumDistance(const vector<int>& arr, int x, int y) {
-    int minDistance = INT_MAX;
+int minimumDistance(int arr[], int n, int x, int y) {
+    int minDist = INT_MAX;
     int prevIndex = -1;
 
-    for (int i = 0; i < arr.size(); i++) {
+    for (int i = 0; i < n; i++) {
         if (arr[i] == x || arr[i] == y) {
             if (prevIndex != -1 && arr[i] != arr[prevIndex]) {
-                minDistance = min(minDistance, abs(i - prevIndex));
+                minDist = min(minDist, i - prevIndex);
             }
             prevIndex = i;
         }
     }
 
-    return minDistance;
+    return minDist;
 }
 
 int main() {
@@ -26,19 +22,28 @@ int main() {
     cout << "Enter the number of elements: ";
     cin >> n;
 
-    vector<int> arr(n);
+    int arr[n];
     cout << "Enter " << n << " integer numbers: ";
     for (int i = 0; i < n; i++) {
         cin >> arr[i];
     }
 
     int x, y;
-    cout << "Enter two numbers: ";
+    cout << "Enter two numbers (x and y): ";
     cin >> x >> y;
 
-    int minDistance = findMinimumDistance(arr, x, y);
+    int minDistance = minimumDistance(arr, n, x, y);
 
-    cout <</* "Minimum distance between " << x << " and " << y << ": " <<*/ minDistance << endl;
+    if (minDistance == INT_MAX) {
+        cout << "No occurrence of x or y in the array." << endl;
+    } else {
+        cout << "Minimum distance between " << x << " and " << y << " is: " << minDistance << endl;
+    }
 
     return 0;
 }
+
+
+
+
+
